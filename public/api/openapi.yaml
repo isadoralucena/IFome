@@ -1,8 +1,8 @@
 openapi: 3.0.1
 info:
   title: IFome
-  description: >
-    Sistema voltado para a cantina de serviço particular localizada no campus Caicó do IFRN, o qual tem como objetivo funcionar como um “menu online” para estudantes e servidores do instituto, disponibilizando previamente todas as comidas e bebidas que estão acessíveis no ambiente, permitindo que os clientes tenham um pré-atendimento, a partir de uma reserva, daquilo que desejarem comprar, garantindo maior agilidade na recepção presencial dos estudantes, diminuindo as filas e a aglomeração.
+  description:
+    Sistema voltado para a cantina de serviço particular localizada no campus Caicó do IFRN. O objetivo é funcionar como um "menu online" para estudantes e servidores do instituto, disponibilizando previamente todas as comidas e bebidas acessíveis no ambiente. Isso permite que os clientes tenham um pré-atendimento através de uma reserva, garantindo maior agilidade na recepção presencial e reduzindo filas e aglomerações.
   version: 1.0.0
 
 paths:
@@ -11,25 +11,27 @@ paths:
       summary: Retorna a lista de alimentos cadastrados.
       responses:
         '200':
-          description: Em caso de sucesso.
+          description: OK
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  nome:
-                    type: string
-                  composicao:
-                    type: string
-                  quantidade_estoque:
-                    type: integer
-                  valor:
-                    type: number
-                required:
-                  - nome
-                  - composicao
-                  - quantidade_estoque
-                  - valor
+                type: array
+                items:
+                  type: object
+                  properties:
+                    nome:
+                      type: string
+                    composicao:
+                      type: string
+                    quantidade_estoque:
+                      type: integer
+                    valor:
+                      type: number
+                  required:
+                    - nome
+                    - composicao
+                    - quantidade_estoque
+                    - valor
     post:
       summary: Cadastra alimentos.
       requestBody:
@@ -53,20 +55,20 @@ paths:
                 - valor
       responses:
         '201':
-          description: Caso o alimento seja criado.
+          description: Criado com sucesso.
         '400':
-          description: Caso falte algum parâmetro na requisição.
+          description: Requisição inválida. Falta algum parâmetro.
         '403':
           description: Usuário não está logado.
     put:
       summary: Edita alimentos.
       responses:
         '200':
-          description: Caso o alimento seja alterado.
+          description: OK. Alimento alterado com sucesso.
         '403':
           description: Usuário não tem permissão ou não está logado.
         '404':
-          description: Caso o alimento seja inexistente.
+          description: Alimento não encontrado.
       requestBody:
         content:
           application/json:
@@ -87,34 +89,35 @@ paths:
                 - quantidade_estoque
                 - valor
       parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        description: 'ID da comida a ser editada'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID do alimento a ser editado
     delete:
       summary: Apaga o alimento.
       responses:
         '200':
-          description: Caso o alimento seja excluído.
+          description: OK. Alimento excluído com sucesso.
         '403':
           description: Usuário não tem permissão ou não está logado.
         '404':
-          description: Caso o alimento seja inexistente.
+          description: Alimento não encontrado.
       parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        description: 'ID da comida a ser deletada'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID do alimento a ser deletado
 
   /alimentos/{id}:
     get:
       summary: Retorna um alimento cadastrado.
       responses:
         '200':
+          description: OK. Alimento encontrado.
           content:
             application/json:
               schema:
@@ -133,27 +136,8 @@ paths:
                   - composicao
                   - quantidade_estoque
                   - valor
-          description: Caso o alimento seja encontrado.
         '404':
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  nome:
-                    type: string
-                  composicao:
-                    type: string
-                  quantidade_estoque:
-                    type: integer
-                  valor:
-                    type: number
-                required:
-                  - nome
-                  - composicao
-                  - quantidade_estoque
-                  - valor
-          description: Caso o alimento seja inexistente.
+          description: Alimento não encontrado.
       parameters:
         - name: id
           in: path
@@ -166,22 +150,24 @@ paths:
       summary: Retorna a lista de bebidas cadastradas.
       responses:
         '200':
-          description: Em caso de sucesso.
+          description: OK
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  nome:
-                    type: string
-                  quantidade_estoque:
-                    type: integer
-                  valor:
-                    type: number
-                required:
-                  - nome
-                  - quantidade_estoque
-                  - valor
+                type: array
+                items:
+                  type: object
+                  properties:
+                    nome:
+                      type: string
+                    quantidade_estoque:
+                      type: integer
+                    valor:
+                      type: number
+                  required:
+                    - nome
+                    - quantidade_estoque
+                    - valor
     post:
       summary: Cadastra bebidas.
       requestBody:
@@ -202,20 +188,20 @@ paths:
                 - valor
       responses:
         '201':
-          description: Caso a bebida seja criada.
+          description: Criado com sucesso.
         '400':
-          description: Caso falte algum parâmetro na requisição.
+          description: Requisição inválida. Falta algum parâmetro.
         '403':
           description: Usuário não está logado.
     put:
       summary: Edita bebidas.
       responses:
         '200':
-          description: Caso a bebida seja alterada.
+          description: OK. Bebida alterada com sucesso.
         '403':
           description: Usuário não tem permissão ou não está logado.
         '404':
-          description: Caso a bebida seja inexistente.
+          description: Bebida não encontrada.
       requestBody:
         content:
           application/json:
@@ -233,77 +219,57 @@ paths:
                 - quantidade_estoque
                 - valor
       parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        description: 'ID da bebida a ser editada'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID da bebida a ser editada
 
     delete:
       summary: Apaga a bebida.
       responses:
         '200':
-          description: Caso a bebida seja excluída.
+          description: OK. Bebida excluída com sucesso.
         '403':
           description: Usuário não tem permissão ou não está logado.
         '404':
-          description: Caso a bebida seja inexistente.
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        description: 'ID da bebida a ser deletada'
-
-  /bebidas/{id}:
-    get:
-      summary: Retorna uma bebida cadastradas.
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  nome:
-                    type: string
-                  composicao:
-                    type: string
-                  quantidade_estoque:
-                    type: integer
-                  valor:
-                    type: number
-                required:
-                  - nome
-                  - composicao
-                  - quantidade_estoque
-                  - valor
-          description: Caso o alimento seja encontrado.
-        '404':
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  nome:
-                    type: string
-                  composicao:
-                    type: string
-                  quantidade_estoque:
-                    type: integer
-                  valor:
-                    type: number
-                required:
-                  - nome
-                  - composicao
-                  - quantidade_estoque
-                  - valor
-          description: Caso o alimento seja inexistente.
+          description: Bebida não encontrada.
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: string
+          description: ID da bebida a ser deletada
+
+  /bebidas/{id}:
+    get:
+      summary: Retorna uma bebida cadastrada.
+      responses:
+        '200':
+          description: OK. Bebida encontrada.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nome:
+                    type: string
+                  quantidade_estoque:
+                    type: integer
+                  valor:
+                    type: number
+                required:
+                  - nome
+                  - quantidade_estoque
+                  - valor
+        '404':
+          description: Bebida não encontrada.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+
