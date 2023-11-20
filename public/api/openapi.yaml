@@ -2,11 +2,18 @@ openapi: 3.0.1
 info:
   title: IFome
   description:
-    Sistema voltado para a cantina de serviço particular localizada no campus Caicó do IFRN. O objetivo é funcionar como um "menu online" para estudantes e servidores do instituto, disponibilizando previamente todas as comidas e bebidas acessíveis no ambiente. Isso permite que os clientes tenham um pré-atendimento através de uma reserva, garantindo maior agilidade na recepção presencial e reduzindo filas e aglomerações.
-  version: 1.0.0
+    Sistema voltado para a cantina de serviço particular localizada no campus Caicó do IFRN. O objetivo é funcionar como um "menu online" para estudantes e servidores do instituto, disponibilizando previamente todas os alimentos e bebidas acessíveis no ambiente. Isso permite que os clientes tenham um pré-atendimento através de uma reserva, garantindo maior agilidade na recepção presencial e reduzindo filas e aglomerações.
+  version: '1.1'
+servers:
+  - url: http://{host}:{porta}/api
+    variables:
+      host:
+        default: localhost
+      porta:
+        default: '8000'
 
 paths:
-  /alimentos/:
+  /api/alimentos/:
     get:
       summary: Retorna a lista de alimentos cadastrados.
       responses:
@@ -33,7 +40,7 @@ paths:
                     - quantidade_estoque
                     - valor
     post:
-      summary: Cadastra alimentos.
+      summary: Cadastra alimento.
       requestBody:
         content:
           application/json:
@@ -57,62 +64,16 @@ paths:
         '201':
           description: Criado com sucesso.
         '400':
-          description: Requisição inválida. Falta algum parâmetro.
+          description: Parâmetros inválidos.
         '403':
           description: Usuário não está logado.
-    put:
-      summary: Edita alimentos.
-      responses:
-        '200':
-          description: OK. Alimento alterado com sucesso.
-        '403':
-          description: Usuário não tem permissão ou não está logado.
-        '404':
-          description: Alimento não encontrado.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                nome:
-                  type: string
-                composicao:
-                  type: string
-                quantidade_estoque:
-                  type: integer
-                valor:
-                  type: number
-              required:
-                - nome
-                - composicao
-                - quantidade_estoque
-                - valor
-      parameters:
+  /api/alimentos/{id}:
+    parameters:
         - name: id
           in: path
           required: true
           schema:
             type: string
-          description: ID do alimento a ser editado
-    delete:
-      summary: Apaga o alimento.
-      responses:
-        '200':
-          description: OK. Alimento excluído com sucesso.
-        '403':
-          description: Usuário não tem permissão ou não está logado.
-        '404':
-          description: Alimento não encontrado.
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          description: ID do alimento a ser deletado
-
-  /alimentos/{id}:
     get:
       summary: Retorna um alimento cadastrado.
       responses:
@@ -138,14 +99,47 @@ paths:
                   - valor
         '404':
           description: Alimento não encontrado.
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
+    put:
+      summary: Edita alimento.
+      responses:
+        '200':
+          description: OK. Alimento alterado com sucesso.
+        '400':
+          description: Parâmetros inválidos.
+        '403':
+          description: Usuário não tem permissão ou não está logado.
+        '404':
+          description: Alimento não encontrado.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                composicao:
+                  type: string
+                quantidade_estoque:
+                  type: integer
+                valor:
+                  type: number
+              required:
+                - nome
+                - composicao
+                - quantidade_estoque
+                - valor
+    delete:
+      summary: Apaga alimento.
+      responses:
+        '200':
+          description: OK. Alimento excluído com sucesso.
+        '403':
+          description: Usuário não tem permissão ou não está logado.
+        '404':
+          description: Alimento não encontrado.
 
-  /bebidas/:
+  /api/bebidas/:
     get:
       summary: Retorna a lista de bebidas cadastradas.
       responses:
@@ -190,60 +184,16 @@ paths:
         '201':
           description: Criado com sucesso.
         '400':
-          description: Requisição inválida. Falta algum parâmetro.
+          description: Parâmetros inválidos.
         '403':
           description: Usuário não está logado.
-    put:
-      summary: Edita bebidas.
-      responses:
-        '200':
-          description: OK. Bebida alterada com sucesso.
-        '403':
-          description: Usuário não tem permissão ou não está logado.
-        '404':
-          description: Bebida não encontrada.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                nome:
-                  type: string
-                quantidade_estoque:
-                  type: integer
-                valor:
-                  type: number
-              required:
-                - nome
-                - quantidade_estoque
-                - valor
-      parameters:
+  /api/bebidas/{id}:
+    parameters:
         - name: id
           in: path
           required: true
           schema:
             type: string
-          description: ID da bebida a ser editada
-
-    delete:
-      summary: Apaga a bebida.
-      responses:
-        '200':
-          description: OK. Bebida excluída com sucesso.
-        '403':
-          description: Usuário não tem permissão ou não está logado.
-        '404':
-          description: Bebida não encontrada.
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-          description: ID da bebida a ser deletada
-
-  /bebidas/{id}:
     get:
       summary: Retorna uma bebida cadastrada.
       responses:
@@ -266,10 +216,40 @@ paths:
                   - valor
         '404':
           description: Bebida não encontrada.
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
+    put:
+      summary: Edita bebida.
+      responses:
+        '200':
+          description: OK. Bebida alterada com sucesso.
+        '400':
+          description: Parâmetros inválidos.
+        '403':
+          description: Usuário não tem permissão ou não está logado.
+        '404':
+          description: Bebida não encontrada.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                quantidade_estoque:
+                  type: integer
+                valor:
+                  type: number
+              required:
+                - nome
+                - quantidade_estoque
+                - valor
+    delete:
+      summary: Apaga a bebida.
+      responses:
+        '200':
+          description: OK. Bebida excluída com sucesso.
+        '403':
+          description: Usuário não tem permissão ou não está logado.
+        '404':
+          description: Bebida não encontrada.
 
