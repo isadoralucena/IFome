@@ -41,20 +41,16 @@ class AlimentoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(Alimento $alimento)
     {
-        $alimento = Alimento::findOrFail($id);
-
         return response()->json($alimento, 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAlimentoRequest $request, int $id)
+    public function update(UpdateAlimentoRequest $request, Alimento $alimento)
     {
-        $alimento = Alimento::findOrFail($id);
-
         $alimento->update([
         'nome' => $request->nome,
         'quantidade_estoque' => $request->quantidade_estoque,
@@ -72,10 +68,8 @@ class AlimentoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id)
+    public function destroy(Alimento $alimento)
     {
-        $alimento = Alimento::findOrFail($id);
-
         $alimento->delete();
 
         return response()->json([

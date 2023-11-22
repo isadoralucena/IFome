@@ -50,10 +50,8 @@ class BebidaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBebidaRequest $request, int $id)
+    public function update(UpdateBebidaRequest $request, Bebida $bebida)
     {
-        $bebida = Bebida::findOrFail($id);
-
         $bebida->update([
         'nome' => $request->nome,
         'quantidade_estoque' => $request->quantidade_estoque,
@@ -70,10 +68,8 @@ class BebidaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id)
+    public function destroy(Bebida $bebida)
     {
-        $bebida = Bebida::findOrFail($id);
-
         $bebida->delete();
 
         return response()->json([
