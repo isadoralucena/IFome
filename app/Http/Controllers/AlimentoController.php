@@ -6,22 +6,9 @@ use App\Http\Requests\Alimento\{
     StoreAlimentoRequest, UpdateAlimentoRequest
 };
 use App\Models\Alimento;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use App\Exceptions\Handler;
 
 class AlimentoController extends Controller
 {
-    private function handleNotFoundException(\Exception $e)
-    {
-        $handler = app(Handler::class);
-        $customMessage = $handler->getCustomMessage();
-
-        return response()->json([
-            'status' => false,
-            'message' => $customMessage
-        ], 404);
-    }
-
     /**
      * Display a listing of the resource.
      */
@@ -56,14 +43,9 @@ class AlimentoController extends Controller
      */
     public function show(int $id)
     {
-        try{
-            $alimento = Alimento::findOrFail($id);
+        $alimento = Alimento::findOrFail($id);
 
-            return response()->json($alimento, 200);
-
-        }catch (\NotFoundHttpException $e) {
-            return $this->handleNotFoundException($e);
-        }
+        return response()->json($alimento, 200);
     }
 
     /**
@@ -71,25 +53,20 @@ class AlimentoController extends Controller
      */
     public function update(UpdateAlimentoRequest $request, int $id)
     {
-        try{
+        $alimento = Alimento::findOrFail($id);
 
-            $alimento = Alimento::findOrFail($id);
+        $alimento->update([
+        'nome' => $request->nome,
+        'quantidade_estoque' => $request->quantidade_estoque,
+        'valor' => $request->valor,
+        'composicao' => $request->composicao,
+        ]);
 
-            $alimento->update([
-            'nome' => $request->nome,
-            'quantidade_estoque' => $request->quantidade_estoque,
-            'valor' => $request->valor,
-            'composicao' => $request->composicao,
-            ]);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Alimento editado com sucesso',
-                'alimento' => $alimento
-            ], 200);
-        }catch (\NotFoundHttpException $e) {
-            return $this->handleNotFoundException($e);
-        }
+        return response()->json([
+            'status' => true,
+            'message' => 'Alimento editado com sucesso',
+            'alimento' => $alimento
+        ], 200);
     }
 
     /**
@@ -97,20 +74,14 @@ class AlimentoController extends Controller
      */
     public function destroy(int $id)
     {
-        try{
+        $alimento = Alimento::findOrFail($id);
 
-            $alimento = Alimento::findOrFail($id);
+        $alimento->delete();
 
-            $alimento->delete();
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Alimento deletado com sucesso',
-                'alimento' => $alimento
-            ], 200);
-
-        }catch (\NotFoundHttpException $e) {
-            return $this->handleNotFoundException($e);
-        }
+        return response()->json([
+            'status' => true,
+            'message' => 'Alimento deletado com sucesso',
+            'alimento' => $alimento
+        ], 200);
     }
 }

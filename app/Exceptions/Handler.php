@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class Handler extends ExceptionHandler
 {
-    protected $customMessage;
     /**
      * The list of the inputs that are never flashed to the session on validation exceptions.
      *
@@ -28,10 +27,9 @@ class Handler extends ExceptionHandler
     {
         $this->renderable(function (NotFoundHttpException $e, Request $request) {
             if ($request->is('api/*')){
-                $this->customMessage = 'Rota incorreta ou recurso não encontrado';
 
                 return response()->json([
-                    'message' => $this->customMessage,
+                    'message ' => 'Rota incorreta ou recurso não encontrado',
                     'status' => false
                 ], 404);
             }
@@ -39,19 +37,12 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (Throwable $e, Request $request) {
             if ($request->is('api/*')) {
-                $this->customMessage = 'Erro genérico';
 
                 return response()->json([
-                    'message' => $this->customMessage,
+                    'message' => 'Erro genérico',
                     'status' => false
                 ], 500);
             }
         });
     }
-
-    public function getCustomMessage() : string
-    {
-        return $this->customMessage;
-    }
-
 }

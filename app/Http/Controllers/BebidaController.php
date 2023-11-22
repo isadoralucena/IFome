@@ -6,21 +6,9 @@ use App\Http\Requests\Alimento\{
     StoreBebidaRequest, UpdateBebidaRequest
 };
 use App\Models\Bebida;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use App\Exceptions\Handler;
 
 class BebidaController extends Controller
 {
-    private function handleNotFoundException(\Exception $e)
-    {
-        $handler = app(Handler::class);
-        $customMessage = $handler->getCustomMessage();
-
-        return response()->json([
-            'status' => false,
-            'message' => $customMessage
-        ], 404);
-    }
     /**
      * Display a listing of the resource.
      */
@@ -54,14 +42,9 @@ class BebidaController extends Controller
      */
     public function show(int $id)
     {
-        try{
-            $bebida = Bebida::findOrFail($id);
+        $bebida = Bebida::findOrFail($id);
 
-            return response()->json($bebida, 200);
-
-        }catch (\NotFoundHttpException $e) {
-            return $this->handleNotFoundException($e);
-        }
+        return response()->json($bebida, 200);
     }
 
     /**
@@ -69,23 +52,19 @@ class BebidaController extends Controller
      */
     public function update(UpdateBebidaRequest $request, int $id)
     {
-        try{
-            $bebida = Bebida::findOrFail($id);
+        $bebida = Bebida::findOrFail($id);
 
-            $bebida->update([
-            'nome' => $request->nome,
-            'quantidade_estoque' => $request->quantidade_estoque,
-            'valor' => $request->valor,
-            ]);
+        $bebida->update([
+        'nome' => $request->nome,
+        'quantidade_estoque' => $request->quantidade_estoque,
+        'valor' => $request->valor,
+        ]);
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Bebida editada com sucesso',
-                'bebida' => $bebida
-            ], 200);
-        }catch (\NotFoundHttpException $e) {
-            return $this->handleNotFoundException($e);
-        }
+        return response()->json([
+            'status' => true,
+            'message' => 'Bebida editada com sucesso',
+            'bebida' => $bebida
+        ], 200);
     }
 
     /**
@@ -93,18 +72,14 @@ class BebidaController extends Controller
      */
     public function destroy(int $id)
     {
-        try{
-            $bebida = Bebida::findOrFail($id);
+        $bebida = Bebida::findOrFail($id);
 
-            $bebida->delete();
+        $bebida->delete();
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Bebida deletada com sucesso',
-                'bebida' => $bebida
-            ], 200);
-        }catch (\NotFoundHttpException $e) {
-            return $this->handleNotFoundException($e);
-        }
+        return response()->json([
+            'status' => true,
+            'message' => 'Bebida deletada com sucesso',
+            'bebida' => $bebida
+        ], 200);
     }
 }
