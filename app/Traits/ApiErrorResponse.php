@@ -19,7 +19,7 @@ trait ApiErrorResponse
         throw new HttpResponseException (
             response()->json([
             'status' => false,
-            'message' => 'Validation failed',
+            'message' => 'Validação falhou',
             'errors' => $validator->errors()
             ], 400)
         );

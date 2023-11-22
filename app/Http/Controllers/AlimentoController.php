@@ -6,9 +6,22 @@ use App\Http\Requests\Alimento\{
     StoreAlimentoRequest, UpdateAlimentoRequest
 };
 use App\Models\Alimento;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Exceptions\Handler;
 
 class AlimentoController extends Controller
 {
+    private function handleNotFoundException(\Exception $e)
+    {
+        $handler = app(Handler::class);
+        $customMessage = $handler->getCustomMessage();
+
+        return response()->json([
+            'status' => false,
+            'message' => $customMessage
+        ], 404);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -48,11 +61,8 @@ class AlimentoController extends Controller
 
             return response()->json($alimento, 200);
 
-        } catch (\Exception $e){
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ], 404);
+        }catch (\NotFoundHttpException $e) {
+            return $this->handleNotFoundException($e);
         }
     }
 
@@ -77,11 +87,8 @@ class AlimentoController extends Controller
                 'message' => 'Alimento editado com sucesso',
                 'alimento' => $alimento
             ], 200);
-        }catch (\Exception $e){
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ], 404);
+        }catch (\NotFoundHttpException $e) {
+            return $this->handleNotFoundException($e);
         }
     }
 
@@ -101,11 +108,9 @@ class AlimentoController extends Controller
                 'message' => 'Alimento deletado com sucesso',
                 'alimento' => $alimento
             ], 200);
-        }catch(\Exception $e){
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ], 404);
+
+        }catch (\NotFoundHttpException $e) {
+            return $this->handleNotFoundException($e);
         }
     }
 }

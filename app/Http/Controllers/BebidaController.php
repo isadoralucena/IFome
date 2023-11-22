@@ -2,14 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\Alimento\{
     StoreBebidaRequest, UpdateBebidaRequest
 };
 use App\Models\Bebida;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use App\Exceptions\Handler;
 
 class BebidaController extends Controller
 {
+    private function handleNotFoundException(\Exception $e)
+    {
+        $handler = app(Handler::class);
+        $customMessage = $handler->getCustomMessage();
+
+        return response()->json([
+            'status' => false,
+            'message' => $customMessage
+        ], 404);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -48,11 +59,8 @@ class BebidaController extends Controller
 
             return response()->json($bebida, 200);
 
-        } catch (\Exception $e){
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ], 404);
+        }catch (\NotFoundHttpException $e) {
+            return $this->handleNotFoundException($e);
         }
     }
 
@@ -75,11 +83,8 @@ class BebidaController extends Controller
                 'message' => 'Bebida editada com sucesso',
                 'bebida' => $bebida
             ], 200);
-        }catch (\Exception $e){
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ], 404);
+        }catch (\NotFoundHttpException $e) {
+            return $this->handleNotFoundException($e);
         }
     }
 
@@ -98,11 +103,8 @@ class BebidaController extends Controller
                 'message' => 'Bebida deletada com sucesso',
                 'bebida' => $bebida
             ], 200);
-        }catch(\Exception $e){
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ], 404);
+        }catch (\NotFoundHttpException $e) {
+            return $this->handleNotFoundException($e);
         }
     }
 }
