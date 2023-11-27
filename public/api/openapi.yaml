@@ -11,6 +11,12 @@ servers:
         default: localhost
       porta:
         default: '8000'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 
 paths:
   /api/alimentos/:
@@ -41,6 +47,8 @@ paths:
                     - valor
     post:
       summary: Cadastra alimento.
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -100,6 +108,8 @@ paths:
         '404':
           description: Alimento não encontrado.
     put:
+      security:
+        - bearerAuth: []
       summary: Edita alimento.
       responses:
         '200':
@@ -130,6 +140,8 @@ paths:
                 - quantidade_estoque
                 - valor
     delete:
+      security:
+        - bearerAuth: []
       summary: Apaga alimento.
       responses:
         '200':
@@ -163,6 +175,8 @@ paths:
                     - quantidade_estoque
                     - valor
     post:
+      security:
+          - bearerAuth: []
       summary: Cadastra bebidas.
       requestBody:
         content:
@@ -217,6 +231,8 @@ paths:
         '404':
           description: Bebida não encontrada.
     put:
+      security:
+        - bearerAuth: []
       summary: Edita bebida.
       responses:
         '200':
@@ -244,6 +260,8 @@ paths:
                 - quantidade_estoque
                 - valor
     delete:
+      security:
+        - bearerAuth: []
       summary: Apaga a bebida.
       responses:
         '200':
