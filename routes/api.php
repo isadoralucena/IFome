@@ -20,13 +20,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('alimentos', [AlimentoController::class, 'index']);
-Route::post('alimentos', [AlimentoController::class, 'store']);
 Route::get('alimentos/{alimento}', [AlimentoController::class, 'show']);
-Route::put('alimentos/{alimento}', [AlimentoController::class, 'update']);
-Route::delete('alimentos/{alimento}', [AlimentoController::class, 'destroy']);
 
 Route::get('bebidas', [BebidaController::class, 'index']);
-Route::post('bebidas', [BebidaController::class, 'store']);
 Route::get('bebidas/{bebida}', [BebidaController::class, 'show']);
-Route::put('bebidas/{bebida}', [BebidaController::class, 'update']);
-Route::delete('bebidas/{bebida}', [BebidaController::class, 'destroy']);
+
+Route::middleware('token.auth')->group(function () {
+    Route::post('alimentos', [AlimentoController::class, 'store']);
+    Route::put('alimentos/{alimento}', [AlimentoController::class, 'update']);
+    Route::delete('alimentos/{alimento}', [AlimentoController::class, 'destroy']);
+
+    Route::post('bebidas', [BebidaController::class, 'store']);
+    Route::put('bebidas/{bebida}', [BebidaController::class, 'update']);
+    Route::delete('bebidas/{bebida}', [BebidaController::class, 'destroy']);
+});
