@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Alimento\{
+use App\Http\Requests\Bebida\{
     StoreBebidaRequest, UpdateBebidaRequest
 };
 use App\Models\Bebida;

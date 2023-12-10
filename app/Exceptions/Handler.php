@@ -51,7 +51,7 @@ class Handler extends ExceptionHandler
             if ($request->is('api/*')) {
 
                 return response()->json([
-                    'message' => 'Erro genérico',
+                    'message' => $e->getMessage(),
                     'status' => false
                 ], 500);
             }

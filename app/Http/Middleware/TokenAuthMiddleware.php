@@ -11,14 +11,6 @@ use Illuminate\Support\Facades\Log;
 
 class TokenAuthMiddleware
 {
-    protected $cache;
-    protected $httpClient;
-
-    public function __construct(Cache $cache, Http $httpClient)
-    {
-        $this->cache = $cache;
-        $this->httpClient = $httpClient;
-    }
     /**
      * Handle an incoming request.
      *
@@ -36,24 +28,23 @@ class TokenAuthMiddleware
 
         $suap_data = null;
 
-        if ($this->cache->has($suap_token)) {
-
-            $suap_data = $this->cache->get($suap_token);
-
+        if (cache()->has($suap_token)) {
+            $suap_data = cache()->get($suap_token);
         } else {
             try {
-            $resp = Http::withToken($suap_token)
-                ->acceptJson()
-                ->get('https://suap.ifrn.edu.br/api/v2/minhas-informacoes/meus-dados/')
-                ->getBody()->getContents();
-
-            } catch(\Exception $e){
+                $resp = Http::withToken($suap_token)
+                    ->acceptJson()
+                    ->get('https://suap.ifrn.edu.br/api/v2/minhas-informacoes/meus-dados/')
+                    ->getBody()
+                    ->getContents();
+            } catch (\Exception $e) {
                 Log::error('Erro ao acessar o SUAP: ' . $e->getMessage());
 
                 return response()->json([
                     'error' => 'Erro ao acessar o SUAP',
                 ], 500);
             }
+
             $json = json_decode(
                 $resp,
                 associative: true,
@@ -65,7 +56,7 @@ class TokenAuthMiddleware
                 'matricula' => $json['matricula'],
             ];
 
-            $this->cache->put($suap_token, $suap_data);
+            cache()->put($suap_token, $suap_data);
         }
 
         $request->attributes->set('usuario', $suap_data);

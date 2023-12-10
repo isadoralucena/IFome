@@ -24,7 +24,7 @@ class UpdateBebidaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => 'required|string|unique:alimentos,nome|min:3',
+            'nome' => 'required|string|unique:bebidas,nome|min:3',
             'quantidade_estoque' => 'required|integer|min:0',
             'valor' => 'required|numeric|min:0',
         ];
