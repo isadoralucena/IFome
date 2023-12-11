@@ -19,7 +19,7 @@ components:
       bearerFormat: JWT
 
 paths:
-  /api/alimentos/:
+  /alimentos/:
     get:
       summary: Retorna a lista de alimentos cadastrados.
       responses:
@@ -75,7 +75,7 @@ paths:
           description: Parâmetros inválidos.
         '403':
           description: Usuário não está logado.
-  /api/alimentos/{id}:
+  /alimentos/{id}:
     parameters:
         - name: id
           in: path
@@ -151,7 +151,7 @@ paths:
         '404':
           description: Alimento não encontrado.
 
-  /api/bebidas/:
+  /bebidas/:
     get:
       summary: Retorna a lista de bebidas cadastradas.
       responses:
@@ -201,7 +201,7 @@ paths:
           description: Parâmetros inválidos.
         '403':
           description: Usuário não está logado.
-  /api/bebidas/{id}:
+  /bebidas/{id}:
     parameters:
         - name: id
           in: path
